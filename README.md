@@ -62,6 +62,7 @@ make flow
 make prove         # every check, including the theorems; GNATprove FSF 16
 make format-check
 make bench         # production build: no contracts, no run-time checks
+make bench-corpora # the same on public corpora (downloads them)
 ```
 
 The Ada test harness uses the small ordinary-Ada `Test_Checks` package in
@@ -79,3 +80,34 @@ applications.
 Algorithm references:
 [Gil and Scott, A Bijective String Sorting Transform](https://arxiv.org/abs/1201.3077)
 and [Kufleitner, On Bijective Variants of the Burrows-Wheeler Transform](https://arxiv.org/abs/0908.0239).
+
+## Performance
+
+`make bench-corpora` times the production build (`-O2 -gnatp -gnatn`, no
+contracts) on the public corpora that suffix-sorting and BWT libraries are
+benchmarked on: Silesia, Large Canterbury, the Gauntlet, Pizza&Chili and
+bzip2's samples, cut to 1 MiB and 4 MiB. It downloads them on first use. The
+figures below were measured on 2026-09-25 on an AMD Ryzen 9 3950X (Zen 2).
+Each one is the time taken here divided by a reference implementation's, as a
+geometric mean over the corpora. Lower is better, and 1× is parity.
+
+| Transform        | Reference                              | 1 MiB | 4 MiB |
+|------------------|----------------------------------------|-------|-------|
+| Classical encode | faster of libsais (on S·S) and bzip2   | 2.7×  | 2.6×  |
+| Bijective encode | Bannai et al.'s linear-time BBWT       | 1.9×  | 2.2×  |
+| Classical decode | libsais `unbwt`                        |       | 1.17× |
+| Bijective decode | Bannai et al.'s `unbbwt`               |       | 1.25× |
+
+- On real text at 4 MiB, classical encoding takes 1.4–2.2× as long as the
+  reference, and is faster than libsais on `x-ray`. Bijective encoding is on
+  par or faster on `dna`, `sao`, `x-ray` and `ooffice` at 1 MiB.
+- The Gauntlet, which is built to defeat suffix sorters, stays 5–9× behind.
+  Nearly every row stays unsettled until the last doubling rounds, and only a
+  linear-time construction would close that gap.
+- A one-off comparison found byte-identical output on 57 inputs. The one
+  exception is the classical primary index on periodic input, which depends
+  on the tie order.
+
+The reference implementations and their drivers are not included, so
+`make bench-corpora` reports this project's timings only.
+[ROADMAP.md](ROADMAP.md) records how each figure was reached.

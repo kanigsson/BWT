@@ -43,8 +43,9 @@ test-contracts:
 flow:
 	$(GNATPROVE) -P bwt.gpr -U --mode=flow -j$(JOBS)
 
-#  From scratch, a few checks need more than 5 seconds; 20 leaves a margin
-#  for slower machines.
+#  The budget was 5 seconds while the proof was developed, so that a check
+#  needing longer showed its lemma wanted splitting. From scratch two checks
+#  need more than that, and the experiment is winding down, so it is 20 now.
 #  Alt-Ergo is listed for three checks that CVC5 and Z3 stopped proving when
 #  Max_Length grew to 2**24, even at level 4 with a minute each; Alt-Ergo
 #  needs a fraction of a second for them.
