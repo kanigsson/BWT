@@ -54,7 +54,7 @@ Unchecked items are proposals. None of them is needed for what is proved today.
   precondition in `Bijective_Rows_Unique`, a post of
   `Onto_Proofs.Get_Rows_Ctx`), even at level 4 with a minute each. Alt-Ergo
   proves them in under 130 steps, so it joined the prover list. Why the bound
-  affects them is not understood. A forced proof now takes 6¾ min at `-j16`.
+  affects them is not understood.
 - [ ] **Lift `Max_Length` to 2**30.** `4 * Max_Length` must fit in
   `Integer`, so the horizons need `Long_Long_Integer`, or a bound of 2**28.
 - [ ] **Caller-provided storage.** Unconstrained function results and local
@@ -339,13 +339,8 @@ prove first.
 
 ## Proof engineering
 
-- [ ] A forced `make prove` takes about 8½ min at `-j16` (2026-09-24, at
-  `Max_Length` = 2**24, with prefix doubling for both encoders; it was 3½ min
-  at 1,024). `Doubling` alone took about 1 min; with the leaner round
-  (1,474 checks) it takes 4½ min from scratch at `-j16` under a parallel
-  load (2026-09-25). `Onto_Proofs` is 1,870
-  lines. Record per-unit times with `--report=statistics`, so that
-  regressions are visible.
+- [ ] `Onto_Proofs` is 1,870 lines. Record per-unit times with
+  `--report=statistics`, so that regressions are visible.
 - [ ] The generic alphabet and the cycle BWT will move lemmas between units.
   Carry the "quantify over positions, not offsets" and "opaque atoms"
   practices from PROOF.md into the new units from the start.

@@ -81,6 +81,12 @@ Algorithm references:
 [Gil and Scott, A Bijective String Sorting Transform](https://arxiv.org/abs/1201.3077)
 and [Kufleitner, On Bijective Variants of the Burrows-Wheeler Transform](https://arxiv.org/abs/0908.0239).
 
+## Proof
+
+With GNATprove FSF 16.1.0, `make prove` proves all 10,406 checks. From
+scratch, with a 20 s timeout per check, it takes about 17 min at `-j16`
+(`make prove JOBS=16`).
+
 ## Performance
 
 `make bench-corpora` times the production build (`-O2 -gnatp -gnatn`, no
